@@ -29,11 +29,8 @@ init(Req, State) ->
   {ok, Req4, State}.
 
 handle(<<"login">>, _, _, Data) ->
-%% cowboy 2.0에 새로 추가된 부분
-  Qs = cowboy_req:parse_qs(Data),
-%%  io:format("~n Data : ~p~n",[Qs] ),
-  Id = proplists:get_value(<<"id">>, Qs),
-  Password = proplists:get_value(<<"password">>, Qs),
+  #{id := Id, password := Password} = cowboy_req:match_qs([id, password], Data),
+
   case mon_users:login(Id, Password) of
     {ok, SessionKey} ->
       jsx:encode([
@@ -44,9 +41,8 @@ handle(<<"login">>, _, _, Data) ->
   end;
 
 handle(<<"join">>, _, _, Data) ->
-  Qs = cowboy_req:parse_qs(Data),
-  Id = proplists:get_value(<<"id">>, Qs),
-  Password = proplists:get_value(<<"password">>, Qs),
+  #{id := Id, password := Password} = cowboy_req:match_qs([id, password], Data),
+
   case mon_users:join(Id, Password) of
     fail ->
       jsx:encode([{<<"result">>, <<"duplicated">>}]);
@@ -55,10 +51,8 @@ handle(<<"join">>, _, _, Data) ->
   end;
 
 handle(<<"users">>, <<"point">>, _, Data) ->
-  Qs = cowboy_req:parse_qs(Data),
-  SessionKey = proplists:get_value(<<"session_key">>, Qs),
-  Point1 = proplists:get_value(<<"point">>, Qs),
-  Point = binary_to_integer(Point1),
+  #{point := Point0, session_key := SessionKey} = cowboy_req:match_qs([point, session_key ], Data),
+  Point = binary_to_integer(Point0),
   case mon_users:point(SessionKey, Point) of
       ok ->
         jsx:encode([{<<"result">>, <<"ok">>}]);
@@ -67,9 +61,7 @@ handle(<<"users">>, <<"point">>, _, Data) ->
   end;
 
 handle(<<"users">>, <<"token">>, _, Data) ->
-  Qs = cowboy_req:parse_qs(Data),
-  SessionKey = proplists:get_value(<<"session_key">>, Qs),
-  Token = proplists:get_value(<<"token">>, Qs),
+  #{token := Token, session_key := SessionKey} = cowboy_req:match_qs([token, session_key ], Data),
   case mon_users:token(SessionKey, Token) of
     ok ->
       jsx:encode([{<<"result">>, <<"ok">>}]);
