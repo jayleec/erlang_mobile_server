@@ -23,7 +23,7 @@ push(Id, Message) ->
   end.
 
 send(Token, Message) ->
-  %%  Payload
+  %%  Write notification Payload
   Data = [
     {<<"to">>,Token},
     {<<"notification">>, [
