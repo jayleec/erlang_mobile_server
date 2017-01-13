@@ -23,14 +23,20 @@ init(Req, State) ->
 
   Reply = handle(Api, What, Opt, Req),
 
-  Req4 = cowboy_req:reply(200,
+  Req1 = cowboy_req:reply(200,
     #{<<"content-type">> => <<"text/plain">>},
       Reply, Req),
-  {ok, Req4, State}.
+
+    {ok, Req1, State}.
+
+%%handle(<<"websocket">>, _, _, _) ->
+%%    %%  create chatting room1
+%%    chat_manager:init_room(1),
+%%    jsx:encode([{<<"result">>, <<"websocket started">>}]);
 
 handle(<<"login">>, _, _, Data) ->
-  #{id := Id, password := Password} = cowboy_req:match_qs([id, password], Data),
-
+%%    io:format("Data print: ~p~n", [Data]),
+    #{id := Id, password := Password} = cowboy_req:match_qs([id, password], Data),
   case mon_users:login(Id, Password) of
     {ok, SessionKey} ->
       jsx:encode([
@@ -41,8 +47,8 @@ handle(<<"login">>, _, _, Data) ->
   end;
 
 handle(<<"join">>, _, _, Data) ->
-  #{id := Id, password := Password} = cowboy_req:match_qs([id, password], Data),
-
+    io:format("Data print: ~p~n", [Data]),
+    #{id := Id, password := Password} = cowboy_req:match_qs([id, password], Data),
   case mon_users:join(Id, Password) of
     fail ->
       jsx:encode([{<<"result">>, <<"duplicated">>}]);

@@ -5,6 +5,6 @@
               {applications,[kernel,stdlib]},
               {mod,{mon_app,[]}},
               {env,[]},
-              {modules,[chat_admin,chat_manager,mon_apns,mon_app,mon_db,
-                        mon_fcm,mon_gcm,mon_http,mon_reloader,mon_sup,
-                        mon_users,room_sup]}]}.
+              {modules,[chat_admin,chat_manager,ebus_handler,mon_apns,mon_app,
+                        mon_db,mon_fcm,mon_http,mon_reloader,mon_sup,
+                        mon_users,room_sup,ws_handler]}]}.

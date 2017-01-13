@@ -40,7 +40,7 @@
   {ok, Pid :: pid()} | ignore | {error, Reason :: term()}).
 start_link() ->
   gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
-
+%% create chatting rooms
 init_room(Number) ->
   gen_server:call(?MODULE, {init_room, Number}).
 
@@ -67,7 +67,7 @@ get_room() ->
   {ok, State :: #state{}} | {ok, State :: #state{}, timeout() | hibernate} |
   {stop, Reason :: term()} | ignore).
 init([]) ->
-  io:format("chat_manager initialized~n"),
+  io:format("~nchat_manager initialized~n"),
   {ok, #state{}}.
 
 %%--------------------------------------------------------------------

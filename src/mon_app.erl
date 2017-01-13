@@ -38,18 +38,25 @@
 start(_StartType, _StartArgs) ->
   %% necessary application
   ok = application:start(crypto),
+  ok = application:start(asn1),
+  ok = application:start(public_key),
   ok = application:start(cowlib),
   ok = application:start(ranch),
+  ok = application:start(ssl),
   ok = application:start(cowboy),
   ok = application:start(mnesia),
   ok = application:start(inets),
-  ssl:start(),
+  ok = application:start(ebus),
+  ok = application:start(jiffy),
+%%  ssl:start(),
 
 
   %% Cowboy Router
   Dispatch = cowboy_router:compile([
     {'_',[
+        {"/websocket", ws_handler, []},
       {"/:api/[:what/[:opt]]", mon_http, #{}}
+
     ]}
   ]),
 
@@ -67,7 +74,7 @@ start(_StartType, _StartArgs) ->
 
   case mon_sup:start_link() of
     {ok, Pid} ->
-      io:format("Hello world!"),
+      io:format("mon_sup started~n"),
       {ok, Pid};
     Error ->
       Error
