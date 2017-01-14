@@ -36,7 +36,7 @@ websocket_handle({text, Msg}, State) ->
 websocket_handle(_Data, State) ->
     {ok, State}.
 
-websocket_info({message_publised, {Sender, Msg}}, State) ->
+websocket_info({message_published, {Sender, Msg}}, State) ->
 %%    io:format("ws info~n"),
     {reply, {text, jiffy:encode({[{sender,Sender}, {msg, Msg}]})}, State};
 websocket_info(_Info, State) ->

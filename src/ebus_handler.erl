@@ -14,4 +14,4 @@
 
 handle_msg(Msg, Context) ->
 %%    io:format("handle_msg started!~n"),
-    Context ! {message_publised, Msg}.
+    Context ! {message_published, Msg}.
